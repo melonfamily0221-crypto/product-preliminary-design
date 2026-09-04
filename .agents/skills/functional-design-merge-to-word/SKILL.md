@@ -24,13 +24,15 @@ description: 将批量生成的功能设计 Markdown 模块合并为符合模板
 
 ```powershell
 python .agents\skills\functional-design-merge-to-word\scripts\merge_to_word.py `
-  --input_dir "docs\pdd\functional-design\系统管理" `
-  --output_md "docs\pdd\achievement\2_功能设计-系统管理.md" `
-  --output_docx "docs\pdd\achievement\2_功能设计-系统管理.docx" `
-  --module_name "系统管理"
+  --input_dir "docs\functional-design\系统管理" `
+  --output_md "docs\achievement\2_功能设计-系统管理.md" `
+  --output_docx "docs\achievement\2_功能设计-系统管理.docx" `
+  --module_name "系统管理" `
+  --order "用户管理,角色管理,菜单管理,部门管理,岗位管理,字典管理,参数设置,通知公告"
 ```
 
 ### 3. 脚本自动执行的操作
+- **Mermaid 流程图自动渲染 (Mermaid Rendering)**: 自动提取各模块中的 Mermaid 业务流程图代码，并转换为高清流程图图片嵌入 Word 中，避免 Word 默认将 Mermaid 代码块渲染为纯文本代码。
 - **层级降级 (Hierarchical Shifting)**: 将所有内部标题统一下调 4 个级别（`#` → `#####`），并封顶为 6 级（`######`），防止超出 Markdown 规范导致渲染异常。
 - **动态功能清单 (Dynamic Table of Features)**: 自动提取模块名称，并在合并文档的顶部生成"功能清单"汇总表格。
 - **Pandoc Markdown 兼容性处理**: 使用正则表达式全量清除所有 HTML 注释（`<!-- ... -->`，含行尾注释），确保 Pandoc 能够正确识别表格和列表前的空行，防止渲染出现错位或中断。

@@ -1,28 +1,35 @@
 ---
 name: template-file-generator
 description: >-
-  当用户希望从 Word (.docx) 格式的产品需求文档（PRD）或系统设计文档（如概要设计说明书.docx）中提取骨架 Markdown 模板时，使用此技能。它会自动解析文档的标题层级，并为 UI 页面、业务流程、数据库和 API 等章节注入标准占位符模板。
+  当用户希望从 Word (.docx) 格式的产品需求文档（PRD）或系统设计文档（如概要设计说明书.docx）中提取骨架 Markdown 模板时，使用此技能。它会自动解析文档的标题层级，并为 UI 页面、业务流程、数据库和 API 等章节注入标准占位符模板；针对【功能设计】章节采用单个典型模块/页面的推导示例（避免冗余展开全部功能点），并自动生成完整总模板与分章节子模板。
 ---
 
 # 模板文件生成器 (Template File Generator)
 
 该技能从 Microsoft Word 文档（.docx）中提取层级标题结构，并生成简洁的骨架 Markdown 模板。它会剥离所有正文段落、表格和原始数据，仅保留文档的结构性标题，然后针对特定功能领域智能注入标准化占位符模板（如空表格和 HTML 注释），涵盖：
 
-- **UI 设计（页面原型、页面字段等）**
-- **业务流程（业务流转、Mermaid 流程图）**
+- **业务概况（系统流程清单、系统流程说明及流程图节点说明表格）**
+- **功能设计（功能清单、以首个典型一级/二级模块为推导示例的标准结构：原型图、功能说明、控件表、字段表）**
 - **数据库设计（数据库表清单、ER 图）**
-- **接口设计（接口参数、接收数据清单）**
+- **接口设计（接口参数、接收/发送数据清单）**
+
+## 设计原则
+
+- **单示例推导**：对于【功能设计】章节，不冗余罗列全部功能点，仅提取首个一级模块、二级模块、主页面及弹窗作为标准四要素示例，文末附推导注释，其余模块依此推导编写。
+- **自动分拆子模板**：脚本在生成总模板（如 `概要设计模板.md`）的同时，默认自动在同目录下拆分输出 4 个分章节子模板（`1_业务概况.md`、`2_功能设计.md`、`3_数据库设计.md`、`4_接口设计.md`），方便后续模块化独立编写。
 
 ## 执行步骤
 
-1. **定位输入文档**：确认用户 `.docx` 文件的路径（例如：`docs/pdd/original-document/概要设计说明书.docx`）。
-2. **确定输出路径**：确认生成的 Markdown 模板文件的保存位置（例如：`docs/pdd/概要设计模板.md`）。
-3. **运行生成脚本**：携带 `--input` 和 `--output` 参数执行辅助 Python 脚本 `generate_template.py`。
+1. **定位输入文档**：确认用户 `.docx` 文件的路径（例如：`docs/original-document/概要设计说明书.docx`）。
+2. **确定输出路径**：确认生成的 Markdown 模板文件的保存位置（例如：`docs/template-file/概要设计模板.md`）。
+3. **运行生成脚本**：携带 `--input` 和 `--output` 参数执行辅助 Python 脚本 `generate_template.py`（默认会自动在同目录下生成 4 个分模块子模板）。
 
 ### 示例命令
 
 ```powershell
-python .agents/skills/template-file-generator/scripts/generate_template.py --input "docs\pdd\original-document\概要设计说明书.docx" --output "docs\pdd\概要设计模板.md"
+python .agents/skills/template-file-generator/scripts/generate_template.py --input "docs\original-document\概要设计说明书.docx" --output "docs\template-file\概要设计模板.md"
 ```
 
-4. **验证输出**：脚本执行完毕后，确认骨架模板文件已被正确生成，并告知用户。
+> 若无需拆分子模板，可添加 `--no-split` 参数。
+
+4. **验证输出**：脚本执行完毕后，确认骨架模板文件（以及对应的 4 个子模块模板）已被正确生成（文件均为 UTF-8 无 BOM 编码），并告知用户。
