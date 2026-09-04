@@ -115,7 +115,7 @@ def main():
 
     out_lines.append(f"\n#### {args.module_name}\n")
 
-    assets_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(args.output_md)), "../assets"))
+    assets_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(args.output_md)), f"../assets/{args.module_name}"))
     os.makedirs(assets_dir, exist_ok=True)
 
     for filepath in md_files:
@@ -136,7 +136,7 @@ def main():
             img_abs_path = os.path.join(assets_dir, img_filename)
             success = render_mermaid_diagram(code, img_abs_path)
             if success:
-                return f"\n\n![{mod_name}业务流程图](../assets/{img_filename})\n\n"
+                return f"\n\n![{mod_name}业务流程图](../assets/{args.module_name}/{img_filename})\n\n"
             else:
                 return match.group(0)
 

@@ -36,6 +36,6 @@ python .agents\skills\functional-design-merge-to-word\scripts\merge_to_word.py `
 - **层级降级 (Hierarchical Shifting)**: 将所有内部标题统一下调 4 个级别（`#` → `#####`），并封顶为 6 级（`######`），防止超出 Markdown 规范导致渲染异常。
 - **动态功能清单 (Dynamic Table of Features)**: 自动提取模块名称，并在合并文档的顶部生成"功能清单"汇总表格。
 - **Pandoc Markdown 兼容性处理**: 使用正则表达式全量清除所有 HTML 注释（`<!-- ... -->`，含行尾注释），确保 Pandoc 能够正确识别表格和列表前的空行，防止渲染出现错位或中断。
-- **资源路径修正 (Asset Path Correction)**: 显式将源文件中的 `../../assets/` 替换为 `../assets/`，确保在 `achievement` 目录中合并后的文件能正确找到 `assets` 目录中的图片。
+- **资源路径修正 (Asset Path Correction)**: 显式将源文件中的 `../../assets/` 替换为 `../assets/`，确保在 `achievement` 目录中合并后的文件能正确映射并找到 `assets/{模块名}/` 目录中的图片。
 - **Pandoc 转换**: 将合并后的 Markdown 文件编译为包含嵌入图片的 `.docx` Word 文档。
 - **表格边框注入 (Table Border Injection)**: 使用 `python-docx` 遍历生成文档的底层 OXML 元素，并为所有表格强制应用标准的实线边框（`Table Grid`）。
